@@ -36,7 +36,8 @@ module.exports = async function (req, res) {
         Note brute : "${texteBrut}"
         `;
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        // Utilisation de la version v1 officielle
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -51,8 +52,6 @@ module.exports = async function (req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            console.error("Erreur API Gemini:", data);
-            // On renvoie l'erreur exacte de Google au client pour voir ce qui bloque
             const googleErrorMsg = data.error?.message || JSON.stringify(data);
             return res.status(500).json({ error: `Google: ${googleErrorMsg}` });
         }
