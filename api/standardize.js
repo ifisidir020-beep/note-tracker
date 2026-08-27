@@ -1,7 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 module.exports = async function (req, res) {
-    // 1. Autoriser les requêtes CORS
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -15,29 +14,27 @@ module.exports = async function (req, res) {
     }
 
     try {
-        // 2. Récupérer le texte brut
         const { texteBrut } = req.body;
 
         if (!texteBrut) {
             return res.status(400).json({ error: "Texte brut manquant." });
         }
 
-        // 3. Initialiser Gemini avec gemini-pro (universel et stable)
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
+        // Utilisation du modèle standard et universel
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        // 4. Les 4 règles d'or (System Prompt)
         const prompt = `
-        Tu es l'assistant Qualité intraitable du projet Technosmart. 
-        Standardise cette note d'appel en respectant STRICTEMENT ces 4 règles :
+        Tu es l'assistant Qualité du projet Technosmart. 
+        Standardise cette note d'appel en respectant ces 4 règles :
         1. Politesse et Neutralité : Traduis les insultes en termes pro ("agression verbale", "propos injurieux").
-        2. Zéro faute : Corrige l'orthographe, la grammaire et mets une ponctuation parfaite.
-        3. Exhaustivité : Ne supprime JAMAIS une donnée technique, une action ou un numéro de téléphone.
-        4. Clarté : Formate le texte de manière structurée avec des tirets (Contexte, Action, Résultat).
+        2. Zéro faute : Corrige l'orthographe et la grammaire.
+        3. Exhaustivité : Ne supprime jamais une donnée technique, une action ou un numéro.
+        4. Clarté : Formate avec des tirets (Contexte, Action, Résultat).
         
-        Ne réponds que par la note corrigée, aucune phrase d'introduction ou de conclusion.
+        Ne réponds que par la note corrigée, sans introduction ni conclusion.
         
-        Note brute à corriger : "${texteBrut}"
+        Note brute : "${texteBrut}"
         `;
 
         const result = await model.generateContent(prompt);
