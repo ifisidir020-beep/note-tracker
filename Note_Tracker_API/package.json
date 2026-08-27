@@ -1,0 +1,9 @@
+{
+  "name": "note-tracker-api",
+  "version": "1.0.0",
+  "description": "API pour Note Tracker Technosmart",
+  "main": "index.js",
+  "dependencies": {
+    "@google/generative-ai": "^0.1.1"
+  }
+}
