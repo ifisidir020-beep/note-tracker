@@ -36,7 +36,6 @@ module.exports = async function (req, res) {
         Note brute : "${texteBrut}"
         `;
 
-        // Appel direct par fetch (zéro bug de version)
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: "POST",
             headers: {
@@ -53,7 +52,9 @@ module.exports = async function (req, res) {
 
         if (!response.ok) {
             console.error("Erreur API Gemini:", data);
-            return res.status(500).json({ error: "Erreur de communication avec l'IA." });
+            // On renvoie l'erreur exacte de Google au client pour voir ce qui bloque
+            const googleErrorMsg = data.error?.message || JSON.stringify(data);
+            return res.status(500).json({ error: `Google: ${googleErrorMsg}` });
         }
 
         const texteCorrige = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -66,6 +67,6 @@ module.exports = async function (req, res) {
 
     } catch (error) {
         console.error("Erreur serveur:", error);
-        return res.status(500).json({ error: "Erreur interne du serveur." });
+        return res.status(500).json({ error: `Serveur: ${error.message}` });
     }
 };
