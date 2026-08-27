@@ -24,7 +24,7 @@ module.exports = async function (req, res) {
 
         // 3. Initialiser Gemini (Mise à jour vers le modèle le plus rapide et intelligent)
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
         // 4. Le NOUVEAU Prompt intelligent (Assistant + Correcteur)
         const prompt = `
