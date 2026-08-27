@@ -1,3 +1,5 @@
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
 module.exports = async function (req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -18,10 +20,8 @@ module.exports = async function (req, res) {
             return res.status(400).json({ error: "Texte brut manquant." });
         }
 
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
-            return res.status(500).json({ error: "Clé API manquante sur Vercel." });
-        }
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `
         Tu es l'assistant Qualité du projet Technosmart. 
@@ -36,36 +36,13 @@ module.exports = async function (req, res) {
         Note brute : "${texteBrut}"
         `;
 
-        // Utilisation de l'endpoint v1 avec gemini-pro
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: prompt }]
-                }]
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            const googleErrorMsg = data.error?.message || JSON.stringify(data);
-            return res.status(500).json({ error: `Google: ${googleErrorMsg}` });
-        }
-
-        const texteCorrige = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (!texteCorrige) {
-            return res.status(500).json({ error: "Réponse vide de l'IA." });
-        }
+        const result = await model.generateContent(prompt);
+        const texteCorrige = result.response.text();
 
         return res.status(200).json({ texteStandardise: texteCorrige.trim() });
 
     } catch (error) {
-        console.error("Erreur serveur:", error);
-        return res.status(500).json({ error: `Serveur: ${error.message}` });
+        console.error("Erreur IA Vercel:", error);
+        return res.status(500).json({ error: `Erreur: ${error.message}` });
     }
 };
