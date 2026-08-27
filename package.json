@@ -1,0 +1,8 @@
+{
+  "name": "note-tracker-vercel",
+  "version": "1.0.0",
+  "description": "API Vercel pour Note Tracker Technosmart",
+  "dependencies": {
+    "@google/generative-ai": "^0.1.1"
+  }
+}
