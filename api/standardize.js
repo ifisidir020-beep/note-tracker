@@ -23,7 +23,7 @@ module.exports = async function (req, res) {
         ];
 
         // LE MODÈLE DE 2026
-        const model = genAI.getGenerativeModel({ model: "gemini-3.7-flash", safetySettings });
+        const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash", safetySettings });
 
         const prompt = `
         Tu es l'assistant de Rédaction Expert du projet Technosmart. 
