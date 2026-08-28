@@ -14,7 +14,7 @@ module.exports = async function (req, res) {
 
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         
-        // 🚨 DÉSACTIVATION DE LA CENSURE (Pour le service client)
+        // DÉSACTIVATION DE LA CENSURE
         const safetySettings = [
             { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
             { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
@@ -22,7 +22,7 @@ module.exports = async function (req, res) {
             { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
         ];
 
-        // 🔥 LE TOUT DERNIER MODÈLE EN DATE (2026) !
+        // LE MODÈLE DE 2026
         const model = genAI.getGenerativeModel({ model: "gemini-3.7-flash", safetySettings });
 
         const prompt = `
@@ -50,7 +50,7 @@ module.exports = async function (req, res) {
         return res.status(200).json({ texteStandardise: texteCorrige.trim() });
 
     } catch (error) {
-        console.error("Erreur IA Vercel:", error);
-        return res.status(500).json({ error: "Erreur de connexion au cerveau IA." });
+        // LE DÉTECTEUR EST ICI !
+        return res.status(500).json({ error: "Secret Google: " + (error.message || error.toString()) });
     }
 };
