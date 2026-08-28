@@ -14,7 +14,7 @@ module.exports = async function (req, res) {
 
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         
-        // 🚨 DÉSACTIVATION DE LA CENSURE (Indispensable pour vos clients)
+        // 🚨 DÉSACTIVATION DE LA CENSURE
         const safetySettings = [
             { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
             { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
