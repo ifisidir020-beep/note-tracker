@@ -22,8 +22,8 @@ module.exports = async function (req, res) {
             { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
         ];
 
-        // On retourne sur l'ancien modèle robuste (gemini-pro)
-        const model = genAI.getGenerativeModel({ model: "gemini-pro", safetySettings });
+        // Modèle le plus récent
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", safetySettings });
 
         const prompt = `
         Tu es l'assistant de Rédaction Expert du projet Technosmart. 
@@ -50,7 +50,7 @@ module.exports = async function (req, res) {
         return res.status(200).json({ texteStandardise: texteCorrige.trim() });
 
     } catch (error) {
-        console.error("Erreur IA Vercel:", error);
-        return res.status(500).json({ error: "Erreur de connexion au cerveau IA." });
+        // 🕵️‍♂️ LIGNE MAGIQUE POUR LIRE LE SECRET DE GOOGLE
+        return res.status(500).json({ error: "Secret Google: " + error.message });
     }
 };
