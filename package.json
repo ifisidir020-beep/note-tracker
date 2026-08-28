@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "API Vercel pour Note Tracker Technosmart",
   "dependencies": {
-    "@google/generative-ai": "latest"
+    "@google/generative-ai": "0.24.1"
   }
 }
